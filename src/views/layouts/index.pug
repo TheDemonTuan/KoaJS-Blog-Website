@@ -1,0 +1,220 @@
+doctype html
+html(lang='en-us')
+  head
+    meta(charset='utf-8')
+    title #{title ? title : 'Home'} | TheDemonTuan
+    // mobile responsive meta
+    meta(name='viewport' content='width=device-width,initial-scale=1')
+    meta(name='description', content='This is meta description')
+    meta(name='author', content='TheDemonTuan')
+    meta(name='generator', content='TDT 1.0')
+    // theme meta
+    meta(name='theme-name', content='tdt')
+    // plugins
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css' integrity='sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' integrity='sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    //script(src='https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.4/purify.min.js' integrity='sha512-Ppv1jKk0X8u28/MsfyW8gWQmfP2HDmCJd03tC4qrFoVZwUdjfkbX14wiBP5akSlM00EP8Kgt1UDZfvdFKLVNmg==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    // Main Stylesheet
+    block customHead
+    link(rel='stylesheet', href='/css/style.css', media='screen')
+    // Favicon
+    link(rel='icon', href='/favicon.ico', type='image/x-icon')
+    meta(property='og:title', content=`${title} | TheDemonTuan`)
+    meta(property='og:description', content='This is meta description')
+    meta(property='og:type', content='website')
+    meta(property='og:url', content='')
+    meta(property='og:updated_time', content='2020-03-15T15:40:24+06:00')
+  body
+    // preloader
+    #preloader
+      #loader
+    // navigation
+    header.navigation.fixed-top
+      .container-fluid
+        nav.navbar.navbar-expand-lg.navbar-white
+          a.navbar-brand(href='/')
+            img.img-fluid(width='100px', src='/logo.webp', alt='TheDemonTuan Logo')
+          button.navbar-toggler.border-0.order-1(type='button',  data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation")
+            i.fa-solid.fa-bars
+          #navigation.collapse.navbar-collapse.text-center.order-4.order-lg-2
+            ul.navbar-nav.mx-auto
+              li.nav-item
+                a.nav-link(href='/') Home 
+              li.nav-item
+                a.nav-link(href='/all-datapacks') Datapacks
+              li.nav-item
+                a.nav-link(href='/forums') Forums
+              li.nav-item
+                a.nav-link(href='/faqs') FAQS
+              li.nav-item.dropdown
+                a.nav-link(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                  | Pages 
+                  i.fa-solid.fa-caret-down.ms-1
+                .dropdown-menu
+                  a.dropdown-item(href='author.html') Author
+                  a.dropdown-item(href='author-single.html') Author Single
+                  a.dropdown-item(href='advertise.html') Advertise
+                  a.dropdown-item(href='post-details.html') Post Details
+                  a.dropdown-item(href='post-elements.html') Post Elements
+                  a.dropdown-item(href='tags.html') Tags
+                  a.dropdown-item(href='search-result.html') Search Result
+                  a.dropdown-item(href='search-not-found.html') Search Not Found
+                  a.dropdown-item(href='privacy-policy.html') Privacy Policy
+                  a.dropdown-item(href='terms-conditions.html') Terms Conditions
+                  a.dropdown-item(href='404.html') 404 Page
+          .order-3.order-lg-3.d-inline-flex.align-items-center.justify-content-center
+            // search
+            form.search-bar
+              input#search-query(name='s', type='search', placeholder='Type & Hit Enter...')
+          .dropdown.order-2.order-lg-3
+            if(userInfo)
+              a.d-block.link-body-emphasis.text-decoration-none.dropdown-toggle(data-bs-toggle='dropdown' aria-expanded='false')
+                img.mx-2.rounded-circle(src=userInfo.avatar alt='mdo' width='32' height='32')
+                strong #{userInfo.username}
+              ul.dropdown-menu
+                li
+                  a.dropdown-item(href=`/member/${userInfo.displayName}`)
+                    i.fa-solid.fa-user
+                    span My Profile
+                if(userInfo.role)
+                  li
+                    a.dropdown-item(href='/admin/dashboard')
+                      i.fa-solid.fa-gauge
+                      span Admin Dashboard
+                li
+                  a.dropdown-item(href='/user/profile')
+                    i.fa-solid.fa-user-gear
+                    span Settings
+                li
+                  a.dropdown-item(href='#') Another action
+                li
+                  a.dropdown-item(href='/logout')
+                    i.fa-solid.fa-right-from-bracket
+                    span Logout
+            else
+              a.btn.btn-outline-primary.mx-3(href='/signin') Sign in
+    mixin breadcrumb(title,breadcrumbs)
+      .header.text-center
+        .container
+          .row
+            .col-lg-12
+              h1.mb-4 #{title}
+              ul.list-inline
+                li.list-inline-item
+                  .text-default
+                    nav(style="--bs-breadcrumb-divider: '➫'" aria-label="breadcrumb")
+                      ol.breadcrumb.fs-5
+                        li.breadcrumb-item
+                          a(href='/') Home
+                        if(breadcrumbs)
+                          - paths = breadcrumbs;
+                        if(paths[0])
+                          - let url = '';
+                          - let path = '';
+                          - for(let i = 0; i < paths.length; i++)
+                            - path = paths[i];
+                            - url = url.concat('/',path);
+                            - path = path.charAt(0).toUpperCase() + path.slice(1);
+                            if(i == paths.length - 1)
+                              li.breadcrumb-item.active(aria-current='page') #{path}
+                            else
+                              li.breadcrumb-item
+                                a(href=url) #{path}
+                        else
+                          li.breadcrumb-item.active(aria-current='page') Home
+        svg.banner-border(height='240', viewBox='0 0 2202 240', fill='none', xmlns='http://www.w3.org/2000/svg')
+          path(d='M1 123.043C67.2858 167.865 259.022 257.325 549.762 188.784C764.181 125.427 967.75 112.601 1200.42 169.707C1347.76 205.869 1901.91 374.562 2201 1', stroke-width='2')
+    mixin adminLayout
+      +breadcrumb(title)
+      section.section-sm
+        .container.dashboard-panel.p-3.rounded-5
+          .row
+            .col-12
+              ul.dashboard-menu.nav.justify-content-center
+                - let listAdminPanel = ['dashboard', 'settings' ,'users','categories' ,'tags', 'posts'];
+                - let listAdminPanelIcon = ['fa-solid fa-gauge', 'fa-solid fa-sliders' ,'fa-solid fa-users','fa-solid fa-folder' ,'fa-solid fa-tags', 'fa-solid fa-pen-to-square'];
+                - for(let i = 0; i < listAdminPanel.length; i++)
+                  - let panel = listAdminPanel[i];
+                  - let url = `/${paths[0]}/${listAdminPanel[i]}`;
+                  li.nav-item
+                    a.nav-link(href=url class=paths[1] == panel ? 'active' : '')
+                      i(class=listAdminPanelIcon[i])
+                      span #{panel.charAt(0).toUpperCase() + panel.slice(1)}
+        .container.my-5
+          .row.justify-content-center
+            .col-12
+              .widget
+                h1.widget-title.border-success.border-bottom #{title}
+                .container
+                  block adminContent
+    mixin userLayout
+      +breadcrumb(title)
+      section.section-sm
+        .container.dashboard-panel.p-3.rounded-5
+          .row
+            .col-12
+              ul.dashboard-menu.nav.justify-content-center
+                - let listUserPanel = ['profile', 'settings', 'security', 'activity'];
+                - let listUserPanelIcon = ['fa-solid fa-user', 'fa-solid fa-sliders', 'fa-solid fa-shield-halved', 'fa-solid fa-chart-line'];
+                - for(let i = 0; i < listUserPanel.length; i++)
+                  - let panel = listUserPanel[i];
+                  - let url = `/${paths[0]}/${listUserPanel[i]}`;
+                  li.nav-item
+                    a.nav-link(href=url class=paths[1] == panel ? 'active' : '')
+                      i(class=listUserPanelIcon[i])
+                      span #{panel.charAt(0).toUpperCase() + panel.slice(1)}
+        .container-fluid.my-5
+          .row.justify-content-center
+            .col-12
+              .widget
+                h1.widget-title.border-success.border-bottom #{title}
+                block userContent
+    // Content
+    main
+      block content
+    .notifications
+    // Footer
+    footer.footer
+      svg.footer-border(height='214', viewBox='0 0 2204 214', fill='none', xmlns='http://www.w3.org/2000/svg')
+        path(d='M2203 213C2136.58 157.994 1942.77 -33.1996 1633.1 53.0486C1414.13 114.038 1200.92 188.208 967.765 118.127C820.12 73.7483 263.977 -143.754 0.999958 158.899', stroke-width='2')
+      .container.mt-2
+        .row.align-items-center
+          .col-md-5.text-center.text-md-left.mb-4
+            ul.list-inline.footer-list.mb-0
+              li.list-inline-item
+                a(href='privacy-policy.html') Privacy Policy
+              li.list-inline-item
+                a(href='terms-conditions.html') Terms Conditions
+          .col-md-2.text-center.mb-4
+            a(href='/')
+              img.img-fluid(width='100px', src='/logo.webp', alt='TheDemonTuan Logo')
+          .col-md-5.text-md-right.text-center.mb-4
+            ul.list-inline.footer-list.mb-0
+              li.list-inline-item
+                a(href='#')
+                  i.fa-brands.fa-facebook
+              li.list-inline-item
+                a(href='#')
+                  i.fa-brands.fa-facebook
+              li.list-inline-item
+                a(href='#')
+                  i.fa-brands.fa-facebook
+              li.list-inline-item
+                a(href='#')
+                  i.fa-brands.fa-github
+              li.list-inline-item
+                a(href='#')
+                  i.fa-brands.fa-youtube
+            h3 Total Online:
+              span.ms-2#totalOnline
+          .mt-4.text-center
+            p.mb-0 © 2021 TheDemonTuan. All Rights Reserved.
+          .col-12
+            .border-bottom.border-default
+    // JS Plugins
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js' integrity='sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js' integrity='sha512-VK2zcvntEufaimc+efOYi622VN5ZacdnufnmX7zIhCPmjhKnOi9ZDMtg1/ug5l183f19gG1/cBstPO4D8N/Img==' crossorigin='anonymous' referrerpolicy='no-referrer')
+    //script(src='/socket.io/socket.io.js')
+    // Main Script
+    script(src='/js/script.js')
+    block scripts

@@ -1,0 +1,46 @@
+extend ./layouts/index
+
+block customHead
+  script(src='https://www.google.com/recaptcha/api.js?render=6LeHzKQjAAAAAB2suSQorn4HvsCJSeG12NkIyAiy')
+
+block content
+  +breadcrumb(title)
+  .container.my-5
+    section.pb-4
+      form#signin-form.row.justify-content-center.align-items-center(method='POST')
+        .col-10.col-sm-8.col-md-6.col-lg-4.col-xl-3.text-center
+          h4.mb-4 Welcome Back!
+          // Username input
+          .form-floating.mb-4
+            input#username.form-control(type='text' name='username' placeholder='Username')
+            label(for='username') Username
+          // Password input
+          .input-group.mb-4
+            .form-floating
+              input#password.form-control(type='password' placeholder="Password" name='password')
+              label.form-label(for='password') Password
+            a#toggle-password.input-group-text
+              i.fa.fa-eye-slash(aria-hidden='true')
+          input(name='_grecaptcha' type='hidden')
+          .d-flex.justify-content-between
+            .form-check
+              input#remember.form-check-input(type='checkbox' name='remember_me' value='true')
+              label.form-check-label(for='remember') Remember me
+            a(href='/forgot') Forgot password?
+          // Submit button
+          button#signin-submit.btn.btn-outline-primary.mt-3(type='submit') Sign in
+          hr.my-4
+          p.w-100.text-center - Or Sign In With -
+          .d-grid.mb-3
+            a.btn.btn-google.btn-oauth.text-uppercase.fw-bold.bg-danger(type='submit' href='/auth/google')
+              i.fab.fa-google.me-2
+              |  Sign in with Google
+          .d-grid
+            button.btn.btn-facebook.btn-oauth.text-uppercase.fw-bold.bg-dark(type='submit')
+              i.fa-brands.fa-github.me-2
+              |  Sign in with Github
+          // Signin buttons
+          .text-center
+            .mb-4
+            p Not a member? 
+              a(href='/signup') Sign up

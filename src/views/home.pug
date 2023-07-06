@@ -1,0 +1,213 @@
+extend ./layouts/index
+
+block content
+  .banner.text-center
+    .container
+      .row
+        .col-lg-9.mx-auto
+          h1.mb-5
+            | What Would You 
+            br
+            |  Like To Read Today?
+          ul.list-inline.widget-list-inline
+            li.list-inline-item
+              a(href='/datapacks') Datapack
+            li.list-inline-item
+              a(href='/forums') Forums
+            li.list-inline-item
+              a(href='/faqs') FAQS
+    svg.banner-border(height='240', viewBox='0 0 2202 240', fill='none', xmlns='http://www.w3.org/2000/svg')
+      path(d='M1 123.043C67.2858 167.865 259.022 257.325 549.762 188.784C764.181 125.427 967.75 112.601 1200.42 169.707C1347.76 205.869 1901.91 374.562 2201 1', stroke-width='2')
+  // end of banner
+  section.section.pb-0
+    .container
+      .row
+        .col-lg-4.mb-5
+          h2.h5.section-title Lastest Datapack
+          if(lastest_post)
+            article.card.posts
+              a(href=lastest_post.link)
+                img.card-img-top(src=lastest_post.thumbnail, alt='post-thumb')
+              .card-body
+                h3.h4.mb-3
+                  a.post-title(href=lastest_post.link) #{lastest_post.title}
+                ul.card-meta.list-inline
+                  li.list-inline-item
+                    a.card-meta-author(href='author-single.html')
+                      img(src='/favicon.ico')
+                      span TheDemonTuan
+                  li.list-inline-item
+                    i.ti-timer
+                    span #{lastest_post.read_time} Min To Read
+                  li.list-inline-item
+                    ul.card-meta-tag.list-inline
+                      - let tagList = lastest_post.tag_list;
+                      - tagList = tagList.split(',');
+                        each tag in tagList
+                          li.list-inline-item
+                            a(href=tag.toLowerCase()) #{tag}
+                  li.list-inline-item
+                    i.ti-calendar
+                    span Last Updated: #{new Date(lastest_post.updatedAt).toLocaleString('en-US')}
+                .container
+                  .row
+                    .col-12
+                      p#description-text=lastest_post.description
+                    a.btn.btn-outline-primary(href=lastest_post.link) Read More
+        .col-lg-4.mb-5
+          h2.h5.section-title Lastest Updated Datapack
+          if(lastest_updated_posts)
+            each post in lastest_updated_posts
+              article.card.mb-3.posts
+                .card-body.d-flex
+                  a(href=post.link)
+                    img.card-img-sm(src=post.thumbnail, alt='post-thumb')
+                  .ms-3
+                    h4
+                      a.post-title(href=post.link) #{post.title}
+                    ul.card-meta.list-inline.mb-0
+                      li.list-inline-item.mb-0
+                        i.ti-calendar
+                        span Last Updated: #{new Date(post.updatedAt).toLocaleString('en-US')}
+                      li.list-inline-item.mb-0
+                        i.ti-timer
+                        span #{post.read_time} Min To Read
+        .col-lg-4.mb-5
+          h2.h5.section-title Popular Datapack
+          article.card
+            .post-slider.slider-sm
+              img.card-img-top(src='', alt='post-thumb')
+            .card-body
+              h3.h4.mb-3
+                a.post-title(href='post-details.html') How To Make Cupcakes and Cashmere Recipe At Home
+              ul.card-meta.list-inline
+                li.list-inline-item
+                  a.card-meta-author(href='author-single.html')
+                    img(src='', alt='Kate Stone')
+                    span Kate Stone
+                li.list-inline-item
+                  i.ti-timer
+                  | 2 Min To Read
+                li.list-inline-item
+                  i.ti-calendar
+                  | 14 jan, 2020
+                li.list-inline-item
+                  ul.card-meta-tag.list-inline
+                    li.list-inline-item
+                      a(href='tags.html') City
+                    li.list-inline-item
+                      a(href='tags.html') Food
+                    li.list-inline-item
+                      a(href='tags.html') Taste
+              p It&rsquo;s no secret that the digital industry is booming. From exciting startups to &mldr;
+              a.btn.btn-outline-primary(href='post-details.html') Read More
+        .col-12
+          .border-bottom.border-default
+  // Posts
+  section.section-sm
+    .container
+      .row.justify-content-center
+        .col-lg-8.mb-5.mb-lg-0
+          h2.h5.section-title Recent Datapack
+          if(recent_posts)
+            each post in recent_posts
+              article.posts.card.mb-4
+                a(href=post.link)
+                  img.card-img-top(src=post.thumbnail, alt='post-thumb')
+                .card-body
+                  h3.mb-3
+                    a.post-title(href=post.link) #{post.title}
+                  ul.card-meta.list-inline
+                    li.list-inline-item
+                      a.card-meta-author(href='author-single.html')
+                        img(src='/favicon.ico', alt='TheDemonTuan')
+                        span TheDemonTuan
+                    li.list-inline-item
+                      i.ti-timer
+                      span #{post.read_time} Min To Read
+                    li.list-inline-item
+                      i.ti-calendar
+                      span Last Updated: #{new Date(post.updatedAt).toLocaleString('en-US')}
+                    li.list-inline-item
+                      ul.card-meta-tag.list-inline
+                        - let tagList = post.tag_list;
+                        - tagList = tagList.split(',');
+                          each tag in tagList
+                            li.list-inline-item
+                              a(href=tag.toLowerCase()) #{tag}
+                  p #{post.description}
+                  a.btn.btn-outline-primary(href=post.link) Read More
+          .d-flex.justify-content-center
+            a.btn.btn-outline-primary(href='/all-datapacks') Load More
+        aside.col-lg-4.sidebar-home
+          // about me
+          .widget.widget-about
+            h4.widget-title Hi, I am TheDemonTuan!
+            img.img-fluid(src='/favicon.ico', alt='Themefisher')
+            p I'm a backend developer also a minecraft datapack developer.
+            ul.list-inline.social-icons.mb-3
+              li.list-inline-item
+                a(href='#')
+                  i.ti-facebook
+              li.list-inline-item
+                a(href='#')
+                  i.ti-twitter-alt
+              li.list-inline-item
+                a(href='#')
+                  i.ti-linkedin
+              li.list-inline-item
+                a(href='#')
+                  i.ti-github
+              li.list-inline-item
+                a(href='#')
+                  i.ti-youtube
+            a.btn.btn-outline-primary.mb-2(href='about-me.html') About me
+          // Search
+          .widget
+            h4.widget-title
+              span Never Miss A News
+            form.widget-search(action='#!', method='post', name='mc-embedded-subscribe-form', target='_blank')
+              input#search-query.mb-3(name='s', type='search', placeholder='Your Email Address')
+              i.ti-email
+              button.btn.btn-primary.btn-block(type='submit', name='subscribe') Subscribe now
+              div(style='position: absolute; left: -5000px;', aria-hidden='true')
+                input(type='text', name='b_463ee871f45d2d93748e77cad_a0a2c6d074', tabindex='-1')
+          // Categories
+          .widget.widget-categories
+            h4.widget-title
+              span Categories
+            ul.list-unstyled.widget-list.mx-3
+              if(categories)
+                each category in categories
+                  li
+                    a.d-flex(href=`/category/${category.slug}`)
+                      | #{category.name}
+          // Tags
+          .widget
+            h4.widget-title
+              span Tags
+            ul.list-inline.widget-list-inline.widget-card.mx-3
+              if(tags)
+                each tag in tags
+                  li.list-inline-item
+                    a(href=`/tag/${tag.slug}`) #{tag.name}
+          // Social
+          .widget
+            h4.widget-title
+              span Social Links
+            ul.list-inline.widget-social
+              li.list-inline-item
+                a(href='#')
+                  i.ti-facebook
+              li.list-inline-item
+                a(href='#')
+                  i.ti-twitter-alt
+              li.list-inline-item
+                a(href='#')
+                  i.ti-linkedin
+              li.list-inline-item
+                a(href='#')
+                  i.ti-github
+              li.list-inline-item
+                a(href='#')
+                  i.ti-youtube

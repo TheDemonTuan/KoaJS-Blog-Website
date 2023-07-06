@@ -1,0 +1,67 @@
+extend ./layouts/index
+block customHead
+  script(src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer)
+
+block content
+  +breadcrumb(title)
+  .container.my-5
+    section.pb-4
+      form#signup-form.row.justify-content-center.gx-3.gy-2.align-items-center(method='POST')
+        .col-sm-8.col-md-6.col-lg-4.col-xl-3.text-center
+          h4.mb-4 Create an Account!
+          p.w-100 - Sign Up With -
+          .d-grid.mb-3
+            a.btn.btn-google.btn-oauth.text-uppercase.fw-bold.bg-danger(type='submit' href='/auth/google')
+              i.fab.fa-google.me-2
+              |  Sign up with Google
+          .d-grid
+            button.btn.btn-facebook.btn-oauth.text-uppercase.fw-bold.bg-dark(type='submit')
+              i.fa-brands.fa-github.me-2
+              |  Sign up with Github
+          hr.my-4
+          p.mt-3 --- or ---
+          .form-floating.mb-4
+            input#display-name.form-control(type='text' name='display_name' placeholder="Display Name")
+            label.form-label(for='#display-name') Display Name
+          // Email input
+          .form-floating.mb-4
+            input#email.form-control(type='email' name='email' placeholder="Email")
+            label.form-label(for='email') Email
+          // Username input
+          .form-floating.mb-4
+            input#username.form-control(type='text' name='username' placeholder="Username")
+            label.form-label(for='username') Username
+          // Password input
+          .input-group.mb-4
+            .form-floating
+              input#password.form-control(type='password' placeholder="Password" name='password')
+              label.form-label(for='password') Password
+            a#toggle-password.input-group-text
+              i.fa.fa-eye-slash(aria-hidden='true')
+          // Confirm Password input
+          .input-group.mb-4
+            .form-floating
+              input#confirm-password.form-control(type='password' placeholder="Confirm Password" name='confirm_password')
+              label.form-label(for='confirm-password') Confirm Password
+            a#toggle-password.input-group-text
+              i.fa.fa-eye-slash(aria-hidden='true')
+          .progress.mb-4(role='progressbar' aria-label='Danger striped example' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100')
+            .progress-bar.progress-bar-striped.bg-danger(style='width: 0%')
+          // Checkbox
+          .form-check.d-flex.justify-content-center.mb-4
+            input#registerCheck.form-check-input.me-2(type='checkbox' name='agree' checked)
+            label.form-check-label(for='registerCheck') I have read and agree to the terms
+          #_grecaptcha.mb-4
+          // Submit button
+          button#signup-button.btn.btn-outline-primary.mb-4(type='submit') Sign up
+          p Have already an account? 
+            a(href='/signin') Sign in 
+
+block scripts
+  script.
+    var onloadCallback = () => {
+      grecaptcha.render('_grecaptcha', {
+        'sitekey' : '6LdlzIgjAAAAAHhB1DoQpIVo4hWDudqCaPkp65_Q',
+        'action' : 'signup'
+      });
+    };

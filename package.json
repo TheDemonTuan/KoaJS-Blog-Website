@@ -1,0 +1,47 @@
+{
+  "name": "fastifyjs_tdt",
+  "version": "1.0.0",
+  "description": "Nodejs Blog Website",
+  "main": "build/server.js",
+  "scripts": {
+    "clean": "rimraf ./build",
+    "copyfile": "copyfiles -u 1 ./src/views/**/* ./build && copyfiles -u 1 ./src/public/**/* ./build",
+    "build": "npm run clean && tsc && npm run copyfile",
+    "local": "ts-node ./src/server.ts",
+    "dev": "nodemon -e ts,json --exec npm run local"
+  },
+  "author": "TheDemonTuan",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/koa": "^2.13.6",
+    "@types/koa__router": "^12.0.0",
+    "@types/koa-bodyparser": "^4.3.10",
+    "@types/koa-static": "^4.0.2",
+    "@types/minify": "^9.1.0",
+    "@types/node": "^20.3.2",
+    "@types/pug": "^2.0.6",
+    "@types/validator": "^13.7.17",
+    "copyfiles": "^2.4.1",
+    "minify": "^10.2.0",
+    "nodemon": "^2.0.22",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@koa/bodyparser": "^5.0.0",
+    "@koa/router": "^12.0.0",
+    "@ladjs/koa-views": "^9.0.0",
+    "axios": "^1.4.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "joi": "^17.9.2",
+    "jose": "^4.14.4",
+    "koa": "^2.14.2",
+    "koa-static": "^5.0.0",
+    "mysql2": "^3.4.4",
+    "pug": "^3.0.2",
+    "validator": "^13.9.0"
+  }
+}
