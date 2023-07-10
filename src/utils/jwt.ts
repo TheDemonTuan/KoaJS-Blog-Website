@@ -1,20 +1,17 @@
 import * as jose from 'jose'
 import fs from 'fs'
 import path from "path";
-import { IResponses } from './responses';
+import { IResponses } from './responses.js';
 import { ParameterizedContext } from 'koa';
 
 const alg = 'PS512'
 
 export const createJwt = async (data: jose.JWTPayload): Promise<IResponses<string>> => {
   try {
-    const jwkPrivate = await JSON.parse(fs.readFileSync(path.join(__dirname, '../keys/private.key'), 'utf8'));
+    const jwkPrivate = await JSON.parse(fs.readFileSync(path.resolve(__dirname, 'keys/private.key'), 'utf8'));
     const privateKey = await jose.importJWK(jwkPrivate, alg)
     const jwt = await new jose.SignJWT(data)
       .setProtectedHeader({ alg })
-      .setIssuedAt()
-      .setIssuer('TheDemonTuan')
-      .setAudience('authenticator')
       .setExpirationTime('1d')
       .sign(privateKey)
     return { success: true, message: 'Create jwt successfully.', data: jwt };
@@ -25,7 +22,7 @@ export const createJwt = async (data: jose.JWTPayload): Promise<IResponses<strin
 
 export const verifyJwt = async (jwt: string): Promise<IResponses<jose.JWTPayload>> => {
   try {
-    const jwkPublic = await JSON.parse(fs.readFileSync(path.join(__dirname, '../keys/public.key'), 'utf8'));
+    const jwkPublic = await JSON.parse(fs.readFileSync(path.resolve(__dirname, 'keys/public.key'), 'utf8'));
     const publicKey = await jose.importJWK(jwkPublic, alg)
     const { payload, protectedHeader } = await jose.jwtVerify(jwt, publicKey, {
       issuer: 'TheDemonTuan',

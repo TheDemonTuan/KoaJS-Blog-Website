@@ -5,6 +5,7 @@ export default interface UserSchema {
   email: string;
   username: string;
   password?: string;
-  role?: string;
-  status?: string;
+  is_oauth?: 0 | 1;
+  role?: 0 | 1;
+  status?: 0 | 1;
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import validator from 'validator';
-import { IResponses } from './responses';
+import { IResponses } from './responses.js';
 
 /**
  * @description: This is the interface for recaptcha data
@@ -26,7 +26,7 @@ export type RecaptchaData = {
 */
 const getResponse = async (recaptchaData: RecaptchaData): Promise<IResponses> => {
   const { response, secret } = recaptchaData;
-  if (!response || !secret || validator.isEmpty(response) || validator.isEmpty(secret)) {
+  if (!response || !secret || validator.default.isEmpty(response) || validator.default.isEmpty(secret)) {
     return { success: false, message: 'Please check the captcha box.' };
   };
   try {

@@ -1,6 +1,6 @@
-import { Next, ParameterizedContext } from "koa";
-import recaptchaVerify, { RecaptchaData } from '../utils/recaptcha'
-import sendResponse, { IResponses } from "../utils/responses";
+import { Next, ParameterizedContext } from 'koa';
+import recaptchaVerify, { RecaptchaData } from '../utils/recaptcha.js'
+import sendResponse, { IResponses } from '../utils/responses.js';
 
 /**
  * Verify recaptcha v2
@@ -12,17 +12,21 @@ import sendResponse, { IResponses } from "../utils/responses";
  * @description If recaptcha is valid, it will call next middleware
  */
 export const recaptchaV2Verify = async (ctx: ParameterizedContext, next: Next) => {
-  const recaptchaData: RecaptchaData = {
-    version: 2,
-    response: ctx.request.body['g-recaptcha-response'],
-    secret: process.env.RECAPTCHA_V2_SECRET_KEY || '',
-  };
-  const result: IResponses = await recaptchaVerify(recaptchaData);
-  if (!result.success) {
-    delete result.data;
-    return sendResponse(ctx, result, 400);
+  try {
+    const recaptchaData: RecaptchaData = {
+      version: 2,
+      response: ctx.request.body?.['g-recaptcha-response'],
+      secret: process.env.RECAPTCHA_V2_SECRET_KEY ?? '',
+    };
+    const result: IResponses = await recaptchaVerify(recaptchaData);
+    if (!result?.success) {
+      delete result?.data;
+      return sendResponse(ctx, result, 400);
+    }
+    await next();
+  } catch (err: any) {
+    sendResponse(ctx, { success: false, message: "Recaptcha verify error !" }, 500);
   }
-  await next();
 };
 
 /**
@@ -37,14 +41,21 @@ export const recaptchaV2Verify = async (ctx: ParameterizedContext, next: Next) =
  * @description If recaptcha score is greater than or equal to 0.5, it will call next middleware
 */
 export const recaptchaV3Verify = async (ctx: ParameterizedContext, next: Next) => {
-  const recaptchaData: RecaptchaData = {
-    version: 3,
-    response: ctx.request.body['_grecaptcha'],
-    secret: process.env.RECAPTCHA_V3_SECRET_KEY || '',
-  };
-  const result: IResponses = await recaptchaVerify(recaptchaData);
-  if (!result.success) {
-    return sendResponse(ctx, result, 400);
+  try {
+    const recaptchaData: RecaptchaData = {
+      version: 3,
+      response: ctx.request.body?.['_grecaptcha'],
+      secret: process.env.RECAPTCHA_V3_SECRET_KEY ?? '',
+    };
+    const result: IResponses = await recaptchaVerify(recaptchaData);
+    if (!result?.success) {
+      delete result?.data;
+      return sendResponse(ctx, result, 400);
+    }
+    await next();
   }
-  await next();
+  catch (err: any) {
+    console.log(err);
+    sendResponse(ctx, { success: false, message: 'Recaptcha verify error !' }, 500);
+  }
 };

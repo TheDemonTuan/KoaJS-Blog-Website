@@ -1,7 +1,7 @@
 import Router from '@koa/router';
 const router: Router = new Router();
-import { homeIndex } from '../controllers/home.controller';
+import { homeIndex } from '../controllers/home.controller.js';
 
-router.get('home', '/', homeIndex);
+router.get('/', homeIndex);
 
 export default router;

@@ -1,4 +1,4 @@
-import { Next, ParameterizedContext } from "koa";
+import { ParameterizedContext } from "koa";
 
 // [GET] /
 export const homeIndex = async (ctx: ParameterizedContext): Promise<void> => {

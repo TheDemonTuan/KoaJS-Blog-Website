@@ -1,6 +1,6 @@
 import { Next, ParameterizedContext } from "koa";
 import Joi, { ObjectSchema, ValidationError } from "joi";
-import sendResponse from "../utils/responses";
+import sendResponse from "../utils/responses.js";
 
 // Logic
 const getFirstJoiErrorMessages = (error: ValidationError): string => {
@@ -12,7 +12,6 @@ const isStrongPassword = (password: string): boolean => {
   const strongPasswordRegex: RegExp = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})');
   return strongPasswordRegex.test(password);
 }
-
 
 export const userSignInValidator = async (ctx: ParameterizedContext, next: Next): Promise<void> => {
   try {
@@ -38,7 +37,7 @@ export const userSignInValidator = async (ctx: ParameterizedContext, next: Next)
     ctx.request.body = value;
     await next();
   } catch (err: any) {
-    return sendResponse(ctx, { success: false, message: err.message }, 500);
+    sendResponse(ctx, { success: false, message: 'Sign in validate error !' }, 500);
   }
 };
 
@@ -84,6 +83,6 @@ export const userSignUpValidator = async (ctx: ParameterizedContext, next: Next)
     ctx.request.body = value;
     await next();
   } catch (err: any) {
-    return sendResponse(ctx, { success: false, message: 'Cant sign in right now, please try again later.' }, 500);
+    sendResponse(ctx, { success: false, message: 'Sign up validate error !' }, 500);
   }
 };

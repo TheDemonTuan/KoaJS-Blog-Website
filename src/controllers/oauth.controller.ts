@@ -1,7 +1,6 @@
-import { Next, ParameterizedContext } from "koa";
+import { Next, ParameterizedContext } from 'koa';
 import axios from 'axios';
-import UserModel from "../models/user.model";
-import { createJwt, setJwtCookie } from '../utils/jwt';
+import UserModel from '../models/user.model.js';
 
 //----------------------------------------------------------------GOOGLE OAUTH2---------------------------------------------------------------
 const googleAuthURL: string = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -36,11 +35,12 @@ export const authGoogleCallback = async (ctx: ParameterizedContext) => {
     const userModel = new UserModel();
     const user = await userModel.findByEmail(userInfo.email);
 
-    if (user) {
-      const jwt = await createJwt({ id: user.id });
-      await setJwtCookie(ctx, jwt.data || '');
+    if (user && !user.is_oauth) {
+      // const jwt = await createJwt({ id: user.id });
+      // await setJwtCookie(ctx, jwt.data || '');
       ctx.redirect('/');
     } else {
+      ctx.state.userOauth = userInfo;
       await ctx.render('oauth', { title: 'Google Oauth' });
     }
   } catch (err: any) {

@@ -30,7 +30,7 @@ html(lang='en-us')
       #loader
     // navigation
     header.navigation.fixed-top
-      .container-fluid
+      .container-fluid.px-5
         nav.navbar.navbar-expand-lg.navbar-white
           a.navbar-brand(href='/')
             img.img-fluid(width='100px', src='/logo.webp', alt='TheDemonTuan Logo')
@@ -67,32 +67,33 @@ html(lang='en-us')
             form.search-bar
               input#search-query(name='s', type='search', placeholder='Type & Hit Enter...')
           .dropdown.order-2.order-lg-3
-            if(userInfo)
-              a.d-block.link-body-emphasis.text-decoration-none.dropdown-toggle(data-bs-toggle='dropdown' aria-expanded='false')
-                img.mx-2.rounded-circle(src=userInfo.avatar alt='mdo' width='32' height='32')
-                strong #{userInfo.username}
-              ul.dropdown-menu
-                li
-                  a.dropdown-item(href=`/member/${userInfo.displayName}`)
-                    i.fa-solid.fa-user
-                    span My Profile
-                if(userInfo.role)
+            .container-fluid
+              if(userInfo)
+                a.d-block.link-body-emphasis.text-decoration-none.dropdown-toggle(data-bs-toggle='dropdown' aria-expanded='false')
+                  img.mx-2.rounded-circle(src=userInfo.avatar alt='mdo' width='32' height='32')
+                  strong=userInfo.username
+                ul.dropdown-menu
                   li
-                    a.dropdown-item(href='/admin/dashboard')
-                      i.fa-solid.fa-gauge
-                      span Admin Dashboard
-                li
-                  a.dropdown-item(href='/user/profile')
-                    i.fa-solid.fa-user-gear
-                    span Settings
-                li
-                  a.dropdown-item(href='#') Another action
-                li
-                  a.dropdown-item(href='/logout')
-                    i.fa-solid.fa-right-from-bracket
-                    span Logout
-            else
-              a.btn.btn-outline-primary.mx-3(href='/signin') Sign in
+                    a.dropdown-item(href=`/member/`)
+                      i.fa-solid.fa-user
+                      span My Profile
+                  if(true)
+                    li
+                      a.dropdown-item(href='/admin/dashboard')
+                        i.fa-solid.fa-gauge
+                        span Admin Dashboard
+                  li
+                    a.dropdown-item(href='/user/profile')
+                      i.fa-solid.fa-user-gear
+                      span Settings
+                  li
+                    a.dropdown-item(href='#') Another action
+                  li
+                    a.dropdown-item(href='/logout')
+                      i.fa-solid.fa-right-from-bracket
+                      span Logout
+              else
+                a.btn.btn-outline-primary.mx-3(href='/signin') Sign in
     mixin breadcrumb(title,breadcrumbs)
       .header.text-center
         .container
@@ -217,4 +218,7 @@ html(lang='en-us')
     //script(src='/socket.io/socket.io.js')
     // Main Script
     script(src='/js/script.js')
+    if(toast)
+      script.
+        createToast('#{toast.type}', '#{toast.message}');
     block scripts

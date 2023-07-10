@@ -1,4 +1,5 @@
 import { ParameterizedContext } from 'koa';
+import { json } from 'stream/consumers';
 
 /**
  * @description: This is the interface for responses
@@ -11,10 +12,12 @@ import { ParameterizedContext } from 'koa';
 export interface IResponses<DataT = any> {
   success: boolean;
   message: string;
+  error_type?: string;
   data?: DataT;
 }
 
 export default (ctx: ParameterizedContext, response: IResponses, status: number): void => {
+  ctx.type = 'application/json';
   ctx.body = response;
   ctx.status = status;
 }

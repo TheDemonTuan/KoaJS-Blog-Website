@@ -24,13 +24,13 @@ const toastDetails = {
 	},
 };
 
-const removeToast = (toast) => {
+const removeToast = async (toast) => {
 	toast.classList.add("hide");
 	if (toast.timeoutId) clearTimeout(toast.timeoutId); // Clearing the timeout for the toast
 	setTimeout(() => toast.remove(), 500); // Removing the toast after 500ms
 };
 
-const createToast = (type, message) => {
+const createToast = async (type, message) => {
 	// Getting the icon and text for the toast based on the id passed
 	const { icon } = toastDetails[type];
 	const toast = document.createElement("li");
@@ -54,25 +54,23 @@ const sendData = async (method, url, data) => {
 				data: data,
 				dataType: "json",
 			})
-				.done((result) => {
-					if (!result.success) {
-						createToast("error", result.message);
-					} else {
-						createToast("success", result.message);
-					}
+				.done(async (result) => {
 					resolve(result);
 				})
-				.fail((jqXHR, textStatus, errorThrown) => {
+				.fail(async (jqXHR, textStatus, errorThrown) => {
 					if (jqXHR.status == 400) {
-						createToast("error", jqXHR.responseJSON.message);
+						resolve({ success: false, message: jqXHR.responseJSON.message });
 					} else if (jqXHR.status == 500) {
-						createToast("error", "Internal Server Error");
+						resolve({ success: false, message: jqXHR.statusText });
+					} else if (jqXHR.status == 404) {
+						resolve({ success: false, message: jqXHR.statusText });
 					} else {
-						reject(jqXHR);
+						throw new Error(jqXHR);
 					}
 				})
-				.always((result) => {
-					//console.clear();
+				.always(async (result) => {
+					eval('console.clear();');
+					eval('debugger;');
 					hideLoading();
 				});
 		} catch (error) {
@@ -154,17 +152,22 @@ const signUpRoute = () => {
 					"/api/v1/users/signup",
 					signUpForm.serialize()
 				);
-				if (result.success) signUpForm.trigger("reset");
+				if (result.success) {
+					createToast("success", result.message);
+					signUpForm.trigger("reset");
+				} else {
+					createToast("error", result.message);
+				}
 				grecaptcha.reset();
 			} catch (err) {
-				createToast("error", "Can't sign up, please try again later!");
+				createToast("error", `Can't signup right now. Please try again later.`);
 			}
 		});
 
 		$("#display-name").on("input", (e) => {
 			const display_name = e.target.value;
 			if (
-				display_name.length < 6 ||
+				display_name.length < 5 ||
 				display_name.length > 20 ||
 				!isAlphaNum($(e.target))
 			) {
@@ -289,16 +292,20 @@ const signInRoute = () => {
 				);
 				if (result.success) {
 					signInForm.trigger("reset");
-				}
+					eval(result.data)
+				} else {
+					createToast("error", result.message);
+				};
 				renderRecaptcha();
 			} catch (err) {
+				console.log(err);
 				createToast("error", "Can't sign in, please try again later!");
 			}
 		});
 		$("#username").on("input", (e) => {
 			const username = e.target.value;
 			if (
-				username.length < 6 ||
+				username.length < 5 ||
 				username.length > 20 ||
 				!isAlphaNum($(e.target))
 			) {
@@ -356,6 +363,8 @@ $(window).on("load", () => {
 });
 
 (($) => {
+	"use strict";
+
 	$('[id=toggle-password]').on('click', (e) => {
 		e.preventDefault();
 		console.log(e.target)

@@ -1,6 +1,6 @@
 import Router from '@koa/router';
 const router: Router = new Router();
-import { authGoogle, authGoogleCallback } from '../controllers/auth.controller';
+import { authGoogle, authGoogleCallback } from '../controllers/oauth.controller.js';
 
 //----------------------------------------------------------------GOOGLE OAUTH2---------------------------------------------------------------
 router.get('/google', authGoogle)

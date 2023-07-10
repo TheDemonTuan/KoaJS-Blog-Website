@@ -1,5 +1,5 @@
 import { Pool } from 'mysql2/promise';
-import pool from '../utils/db'
+import pool from '../utils/db.js'
 
 class BaseModel {
 
@@ -12,8 +12,17 @@ class BaseModel {
 
   public async findAll() {
     try {
-      const [rows, fields]: any = await this.conn.query(`SELECT * FROM ${this.table}`);
+      const [rows, fields]: any = await this.conn.execute(`SELECT * FROM ${this.table}`);
       return rows;
+    } catch (err: any) {
+      return false;
+    }
+  };
+
+  public async findById(id: any) {
+    try {
+      const [rows, fields]: any = await this.conn.execute(`SELECT * FROM ${this.table} WHERE id = ?`, [id]);
+      return rows[0];
     } catch (err: any) {
       return false;
     }
